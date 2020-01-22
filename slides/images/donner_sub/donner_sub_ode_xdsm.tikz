@@ -1,0 +1,66 @@
+
+%%% Preamble Requirements %%%
+% \usepackage{geometry}
+% \usepackage{amsfonts}
+% \usepackage{amsmath}
+% \usepackage{amssymb}
+% \usepackage{sfmath}
+% \usepackage{tikz}
+
+% \usetikzlibrary{arrows,chains,positioning,scopes,shapes.geometric,shapes.misc,shadows}
+
+%%% End Preamble Requirements %%%
+
+\input{ /Users/rfalck/Codes/pyXDSM.git/pyxdsm/diagram_styles }
+\begin{tikzpicture}
+
+\matrix[MatrixSetup]{
+%Row 0
+\node [DataIO] (output_EOM) {$v, \phi$};&
+\node [DataIO] (output_nav) {$x, y$};&
+\node [DataIO] (output_threat) {$time$};&
+&
+\\
+%Row 1
+\node [Analysis] (EOM) {$EOM$};&
+&
+&
+&
+\node [DataIO] (right_output_EOM) {$\dot{x}, \dot{y}$};\\
+%Row 2
+&
+\node [Analysis] (nav) {$nav$};&
+\node [DataInter] (nav-threat) {$r_{ship}$};&
+&
+\\
+%Row 3
+&
+&
+\node [Function] (threat) {$threat$};&
+&
+\node [DataIO] (right_output_threat) {$range_{sub}$};\\
+%Row 4
+&
+&
+&
+&
+\\
+};
+
+% XDSM process chains
+
+
+\begin{pgfonlayer}{data}
+\path
+% Horizontal edges
+(nav) edge [DataLine] (nav-threat)
+(EOM) edge [DataLine] (right_output_EOM)
+(threat) edge [DataLine] (right_output_threat)
+% Vertical edges
+(nav-threat) edge [DataLine] (threat)
+(EOM) edge [DataLine] (output_EOM)
+(nav) edge [DataLine] (output_nav)
+(threat) edge [DataLine] (output_threat);
+\end{pgfonlayer}
+
+\end{tikzpicture}
